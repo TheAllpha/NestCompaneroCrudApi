@@ -5,23 +5,24 @@ import { CompanerosService } from './companeros.service'
 export class CompanerosController {
     constructor(private readonly companerosService: CompanerosService) {}
 
-    @Post()
-    addCompanero(
+      @Post()
+      async addCompanero(
      @Body('title') compTitle: string,
      @Body('description') compDesc: string,
      @Body('age') compAge: number,
      ) {
-        const generatedId =  this.companerosService.insertCompanero(
+        const generatedId =  await this.companerosService.insertCompanero(
             compTitle,
             compDesc,
-            compAge
+            compAge,
             );
         return {id: generatedId}
     }
 
     @Get()
-    getAllCompaneros() {
-        return this.companerosService.getCompaneros()
+    async getAllCompaneros() {
+       const companeros = await this.companerosService.getCompaneros()
+       return companeros;
     }
 
     @Get(':id')
@@ -30,20 +31,20 @@ export class CompanerosController {
     }
 
     @Patch(':id')
-    updateCompanero(
+    async updateCompanero(
         @Param('id') compId: string,
         @Body('title') compTitle: string, 
         @Body('description') compDesc: string, 
         @Body('age') compAge: number,
         ) { 
-    this.companerosService.updateCompanero(compId, compTitle, compDesc, compAge)
+    await this.companerosService.updateCompanero(compId, compTitle, compDesc, compAge)
     return null;
     }
     
     @Delete(':id')
-    removeCompanero(@Param('id') compId: string, ) {
-        this.companerosService.deleteCompanero(compId)
+    async removeCompanero(@Param('id') compId: string, ) {
+       await this.companerosService.deleteCompanero(compId)
         return null;
-    }
+    } 
     
 } 
